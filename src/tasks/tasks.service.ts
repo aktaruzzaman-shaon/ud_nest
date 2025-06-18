@@ -8,4 +8,8 @@ export class TasksService {
     findAll():ITask[]{
         return this.tasks
     }
+
+    findOne(id:string):ITask | undefined{
+        return this.tasks.find(task=>task.id === id)
+    }
 }
