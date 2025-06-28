@@ -6,12 +6,26 @@ export class Task {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 255,
+    unique: true,
+    nullable: false,
+    comment: 'The title of the task',
+    default: '',
+  })
   title: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+    nullable: false,
+  })
   description: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: TaskStatus,
+    default: TaskStatus.OPEN,
+  })
   status: TaskStatus;
 }

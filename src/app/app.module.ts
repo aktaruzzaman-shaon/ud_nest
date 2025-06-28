@@ -2,14 +2,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TasksModule } from './tasks/tasks.module';
+import { TasksModule } from '../tasks/tasks.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { appConfig } from './config/app.config';
-import { appConfigSchema } from './config/config.types';
-import { typeOrmConfig } from './config/database.config';
+import { appConfig } from '../config/app.config';
+import { appConfigSchema } from '../config/config.types';
+import { typeOrmConfig } from '../config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypedConfigService } from './config/typed-config.service';
-import { Task } from './task.entity';
+import { TypedConfigService } from '../config/typed-config.service';
+import { Task } from '../task.entity';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { Task } from './task.entity';
       },
     }),
     TasksModule,
+    UsersModule, // Importing UsersModule
   ],
   controllers: [AppController],
   providers: [
