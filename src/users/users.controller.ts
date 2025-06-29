@@ -1,20 +1,35 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Controller('users')
 export class UsersController {
-  @Get('/:id/{:optional}')
+  @Get('/:id')
   public getUsers(
-    @Param() param: any,
-    @Query() query: any,
-    @Param('optional') optional?: string,
+    @Param('id', ParseIntPipe) id: number | undefined,
+    @Query('limit', new DefaultValuePipe(50), ParseIntPipe)
+    limit: number | undefined,
+    @Query('page', new DefaultValuePipe(10), ParseIntPipe)
+    page: number | undefined,
+
+    // @Param('optional') optional?: string,
   ) {
-    console.log(param, query, optional);
+    console.log(page, id, limit);
     return 'This action returns all users';
   }
 
   @Post()
-  public createUser(@Body() body: any) {
-    console.log(body);
+  public createUser(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
+    console.log(createUserDto);
     return 'Yoeu have created a new user';
   }
 }
