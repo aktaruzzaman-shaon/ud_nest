@@ -1,9 +1,9 @@
-POST http://localhost:3000/users
+PATCH http://localhost:3000/users
 Content-type: application/json
 
 {
   "firstName": "Johnsfsf",
   "lastName": "Doesfsf",
   "email": "john.doe@example.com",
-  "password": "12312313131"
+  "password": "shaononon"
 }

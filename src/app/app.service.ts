@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AppConfig } from '../config/app.config';
-import { TypedConfigService } from '../config/typed-config.service';
+// import { AppConfig } from '../config/app.config';
+// import { TypedConfigService } from '../config/typed-config.service';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly configService: TypedConfigService) {}
+  // constructor(private readonly configService: TypedConfigService) {}
 
   getHello(): string {
-    const prefix = this.configService.get<AppConfig>('app')?.messagePrefix;
-    return `${prefix}Hello World!`;
+    // const prefix = this.configService.get<AppConfig>('app')?.messagePrefix;
+    return `Hello World!`;
   }
 }
