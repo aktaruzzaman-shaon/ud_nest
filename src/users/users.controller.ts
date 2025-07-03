@@ -21,24 +21,22 @@ export class UsersController {
   constructor(private readonly userService: UserService) {}
   // You can inject services here if needed, e.g., private readonly userService: User
 
-  @Get('/:id')
-  public getUsers(
-    @Param() getUsersParamDto: GetUsersParamDto,
-    @Query('limit', new DefaultValuePipe(50), ParseIntPipe)
-    limit: number,
-    @Query('page', new DefaultValuePipe(10), ParseIntPipe)
-    page: number,
+  // @Get('/:id')
+  // public getUsers(
+  //   @Param() getUsersParamDto: GetUsersParamDto,
+  //   @Query('limit', new DefaultValuePipe(50), ParseIntPipe)
+  //   limit: number,
+  //   @Query('page', new DefaultValuePipe(10), ParseIntPipe)
+  //   page: number,
 
-    // @Param('optional') optional?: string,
-  ) {
-    return this.userService.findAll(getUsersParamDto, limit, page);
-  }
+  //   // @Param('optional') optional?: string,
+  // ) {
+  //   return this.userService.findAll(getUsersParamDto, limit, page);
+  // }
 
   @Post()
   public createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(typeof createUserDto);
-    console.log(createUserDto);
-    return 'Yoeu have created a new user';
+    return this.userService.createuser(createUserDto);
   }
 
   @Patch()
