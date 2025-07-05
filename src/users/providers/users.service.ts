@@ -32,13 +32,14 @@ export class UserService {
   //   ];
   // }
 
-  // public findOneByIdid(id: number) {
-  //   return {
-  //     firstName: 'John',
-  //     lastName: 'Doe',
-  //     email: 'a@gmail.com',
-  //   };
-  // }
+  public findOneByIdid(id: number) {
+    console.log('id', id);
+    return {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'a@gmail.com',
+    };
+  }
 
   public async createuser(createUserDto: CreateUserDto) {
     const existingUser = await this.usersRepository.findOne({
