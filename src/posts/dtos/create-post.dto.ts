@@ -25,10 +25,15 @@ import {
   IsString,
   IsUrl,
   Matches,
+  MaxLength,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { postType } from '../enums/postType.enum';
 import { postStatus } from './postStatus.enum';
+import { CreatePostMetaOptionsDto } from './create-post-metaOptions.dto';
+import { Type } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // import { CreatePostMetaOptionsDto } from './create-post-meta-options.dto';
 // import { Type } from 'class-transformer';
@@ -148,15 +153,27 @@ import { postStatus } from './postStatus.enum';
 //   metaOptions?: CreatePostMetaOptionsDto[];
 // }
 export class CreatePostDto {
+  @ApiProperty({
+    description: 'Title is Post dto',
+  })
   @IsString()
   @MinLength(4)
+  @MaxLength(512)
   @IsNotEmpty()
   title: string;
 
+  @ApiProperty({
+    enum: postType,
+    description: "Possible values ,'hello' 'post', 'page' ",
+  })
   @IsEnum(postType)
   @IsNotEmpty()
   postType: postType;
 
+  @ApiProperty({
+    description: "For example - 'my url'",
+    example: 'my-blogs',
+  })
   @IsString()
   @IsNotEmpty()
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
@@ -165,31 +182,72 @@ export class CreatePostDto {
   })
   slug: string;
 
+  @ApiProperty({
+    description: "Possible value 'draft', 'schedule'",
+  })
   @IsEnum(postStatus)
   @IsNotEmpty()
   status: postStatus;
 
+  @ApiPropertyOptional({
+    description: 'This is the content of the post',
+    example: 'This is any valid content',
+  })
   @IsString()
   @IsOptional()
   content?: string;
 
+  @ApiPropertyOptional({
+    description:
+      'Serialize your JSON object else a validation error will be thrown',
+  })
   @IsOptional()
   @IsJSON()
   schema?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsUrl()
   featuredImageUrl?: string;
 
+  @ApiProperty({
+    description: 'Must be a valid timestamp in ISO8601',
+    example: '2024-03-16T07:46:32+0000',
+  })
   @IsISO8601()
   @IsOptional()
   publishOn?: Date;
 
-  @IsOptional()
+  @ApiPropertyOptional()
   @IsArray()
   @IsString({ each: true })
   @MinLength(3, { each: true })
   tags?: string[];
 
-  metaOptions?: [{ key: 'sidebarEnabled'; value: true }];
+  @ApiPropertyOptional({
+    type: 'array',
+    required: false,
+    items: {
+      type: 'object',
+      properties: {
+        key: {
+          type: 'string',
+          description:
+            'The key can be any string identifiet for your meta data',
+          example: 'sidebar enabled',
+        },
+        value: {
+          type: 'string',
+          description:
+            'The key can be any string identifiet for your meta data',
+          example: true,
+        },
+      },
+    },
+  })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePostMetaOptionsDto)
+  metaOptions?: CreatePostMetaOptionsDto[];
 }

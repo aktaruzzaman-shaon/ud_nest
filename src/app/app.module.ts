@@ -66,7 +66,7 @@ import { AppService } from './app.service';
 // import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { PostsModule } from '../posts/posts.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { User } from 'src/users/user.entity';
@@ -80,13 +80,13 @@ import { User } from 'src/users/user.entity';
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
-      useFactory: () => ({
+      useFactory: (): TypeOrmModuleOptions => ({
         type: 'postgres',
         entities: [User],
         synchronize: true,
         port: 5432,
         username: 'postgres',
-        password: 'new_password',
+        password: 'newPassword',
         host: 'localhost',
         database: 'udnest',
       }),
