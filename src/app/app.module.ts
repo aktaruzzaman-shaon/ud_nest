@@ -69,7 +69,7 @@ import { PostsModule } from '../posts/posts.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { User } from 'src/users/user.entity';
+// import { User } from 'src/users/user.entity';
 // import { UsersModule } from './users/users.module';
 
 @Module({
@@ -82,11 +82,12 @@ import { User } from 'src/users/user.entity';
       inject: [],
       useFactory: (): TypeOrmModuleOptions => ({
         type: 'postgres',
-        entities: [User],
+        // entities: [User],
+        autoLoadEntities: true,
         synchronize: true,
-        port: 5432,
+        port: 3005,
         username: 'postgres',
-        password: 'newPassword',
+        password: 'postgres',
         host: 'localhost',
         database: 'udnest',
       }),
