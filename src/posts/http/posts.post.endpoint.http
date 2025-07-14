@@ -11,11 +11,8 @@ Content-Type: application/json
     "featuredImageUrl": "http://localhost.com/images/image1.jpg",
     "publishOn":"2024-03-16T07:46:32+0000",
     "tags": ["nestjs", "typescipt"],
-    "metaOptions": [
-        {
-            "key": "Testkey",
-            "value": 20
-        }
-    ]
+    "metaOptions": {
+    "metaValue": "{ \"sidebarEnabled\": true, \"footerActive\": true }"
+    }
 
 }

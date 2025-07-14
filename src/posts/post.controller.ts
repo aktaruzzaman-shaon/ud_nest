@@ -1,6 +1,5 @@
 import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { create } from 'domain';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { patchhPostDto } from './dtos/patch-post.dto';
@@ -25,6 +24,7 @@ export class PostsController {
   @Post()
   public createPost(@Body() createPostDto: CreatePostDto) {
     console.log(createPostDto);
+    return this.postsService.create(createPostDto);
   }
 
   // Patch request-----------------------------------

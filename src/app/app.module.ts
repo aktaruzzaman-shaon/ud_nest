@@ -69,6 +69,8 @@ import { PostsModule } from '../posts/posts.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { TagsModule } from 'src/tags/tags.module';
+import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 // import { User } from 'src/users/user.entity';
 // import { UsersModule } from './users/users.module';
 
@@ -92,6 +94,8 @@ import { AuthModule } from 'src/auth/auth.module';
         database: 'udnest',
       }),
     }),
+    TagsModule,
+    MetaOptionsModule, // Importing MetaOptionsModule
   ],
   controllers: [AppController],
   providers: [AppService],

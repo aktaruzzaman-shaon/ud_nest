@@ -32,7 +32,7 @@ export class UserService {
   //   ];
   // }
 
-  public findOneByIdid(id: number) {
+  public findOneById(id: number) {
     console.log('id', id);
     return {
       firstName: 'John',
@@ -45,6 +45,7 @@ export class UserService {
     const existingUser = await this.usersRepository.findOne({
       where: { email: createUserDto.email },
     });
+    console.log(existingUser);
     let newUser = this.usersRepository.create(createUserDto);
     newUser = await this.usersRepository.save(newUser);
     return newUser;

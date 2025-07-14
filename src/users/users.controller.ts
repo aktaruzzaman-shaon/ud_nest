@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -68,7 +69,7 @@ export class UsersController {
     // @Param('optional') optional?: string,
   ) {
     const userId = getUsersParamDto.id ?? 0;
-    return this.userService.findOneByIdid(userId);
+    return this.userService.findOneById(userId);
   }
 
   @Post()

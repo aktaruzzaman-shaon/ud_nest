@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [UsersController],
   providers: [UserService],
   imports: [TypeOrmModule.forFeature([User])],
+  exports: [UserService],
 })
 export class UsersModule {
   // This module is currently empty, but you can add providers, controllers, and imports as needed.

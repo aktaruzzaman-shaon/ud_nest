@@ -511,7 +511,7 @@ export class UsersController {
     // @Param(&#x27;optional&#x27;) optional?: string,
   ) {
     const userId &#x3D; getUsersParamDto.id ?? 0;
-    return this.userService.findOneByIdid(userId);
+    return this.userService.findOneById(userId);
   }
 
   @Post()
