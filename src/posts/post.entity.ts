@@ -75,7 +75,7 @@ export class Post {
   metaOptions?: MetaOption;
 
   @ManyToOne(()=>User, (user)=>user.posts)
-  autohor: User;
+  author: User;
 
   tags?: string[];
 }

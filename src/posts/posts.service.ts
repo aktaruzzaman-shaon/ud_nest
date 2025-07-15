@@ -21,9 +21,9 @@ export class PostsService {
   ) {}
 
   public async create(@Body() createPostDto: CreatePostDto) {
-
     //find author from database based on authorId
-    
+    let author = await this.usersService.findOneById(createPostDto.authorId);
+    console.log(author);
 
     //create metaoption
     // const metaOptions = createPostDto.metaOptions
@@ -34,10 +34,14 @@ export class PostsService {
     // }
 
     //create post
-    let post = this.postsRepository.create(createPostDto);
+    let post = this.postsRepository.create({
+      ...createPostDto,
+      author:author
+    });
 
     //add metaoptions
     // if (metaOptions) {
+
     //   post.metaOptions = metaOptions;
     // }
 
