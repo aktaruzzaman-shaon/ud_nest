@@ -32,13 +32,10 @@ export class UserService {
   //   ];
   // }
 
-  public findOneById(id: number) {
-    console.log('id', id);
-    return {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'a@gmail.com',
-    };
+  public async findOneById(id: number) {
+    return await this.usersRepository.findOneBy({
+      id,
+    });
   }
 
   public async createuser(createUserDto: CreateUserDto) {

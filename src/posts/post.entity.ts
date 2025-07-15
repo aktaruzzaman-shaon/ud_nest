@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { postType } from './enums/postType.enum';
 import { postStatus } from './dtos/postStatus.enum';
 // import { CreatePostMetaOptionsDto } from '../meta-options/dtos/create-post-metaOptions.dto';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 export class Post {
@@ -67,9 +68,14 @@ export class Post {
   })
   publishOn?: Date;
 
-  @OneToOne(() => MetaOption)
-  @JoinColumn()
+  @OneToOne(() => MetaOption,(metaOptions)=>metaOptions.post,{
+    cascade:true,
+    eager:true
+  })
   metaOptions?: MetaOption;
+
+  @ManyToOne(()=>User, (user)=>user.posts)
+  autohor: User;
 
   tags?: string[];
 }

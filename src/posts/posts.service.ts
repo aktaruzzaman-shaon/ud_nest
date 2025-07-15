@@ -21,40 +21,58 @@ export class PostsService {
   ) {}
 
   public async create(@Body() createPostDto: CreatePostDto) {
+
+    //find author from database based on authorId
+    
+
     //create metaoption
-    const metaOptions = createPostDto.metaOptions
-      ? this.metaOptionsRepository.create(createPostDto.metaOptions)
-      : null;
-    if (metaOptions) {
-      await this.metaOptionsRepository.save(metaOptions);
-    }
-    console.log(metaOptions);
+    // const metaOptions = createPostDto.metaOptions
+    //   ? this.metaOptionsRepository.create(createPostDto.metaOptions)
+    //   : null;
+    // if (metaOptions) {
+    //   await this.metaOptionsRepository.save(metaOptions);
+    // }
+
     //create post
     let post = this.postsRepository.create(createPostDto);
 
     //add metaoptions
-    if (metaOptions) {
-      post.metaOptions = metaOptions;
-    }
+    // if (metaOptions) {
+    //   post.metaOptions = metaOptions;
+    // }
 
     return await this.postsRepository.save(post);
   }
 
-  public findAll(userId: number) {
-    const user = this.usersService.findOneById(userId);
+  // findall method
+  public async findAll() {
+    // const user = this.usersService.findOneById(userId);
+    let posts = await this.postsRepository.find();
 
-    return [
-      {
-        user: user,
-        title: 'Test Tile',
-        content: 'Test Content',
-      },
-      {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        user: user,
-        title: 'Test Tile 2',
-        content: 'Test Content 2',
-      },
-    ];
+    return posts;
+  }
+
+  // delete method
+
+  public async delete(id: number) {
+    //find the post
+    await this.postsRepository.delete({ id });
+
+    // await this.postsRepository.delete(id);
+    // if (post?.metaOptions?.id) {
+    //   await this.metaOptionsRepository.delete(post.metaOptions.id);
+    // }
+    // if (post?.metaOptions?.id) {
+    //   let ivnerserPost = await this.metaOptionsRepository.find({
+    //     where: { id: post.metaOptions.id },
+    //     relations: {
+    //       post: true,
+    //     },
+    //   });
+
+    //   console.log(ivnerserPost);
+    // }
+
+    return { delted: true, id: id };
   }
 }
