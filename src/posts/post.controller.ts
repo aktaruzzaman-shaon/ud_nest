@@ -1,8 +1,18 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  // Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { patchhPostDto } from './dtos/patch-post.dto';
+import { PatchhPostDto } from './dtos/patch-post.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -42,8 +52,8 @@ export class PostsController {
     description: 'You have get 200 response so this is success udapte post',
   })
   @Patch()
-  public updatePost(@Body() patchhPostDto: patchhPostDto) {
-    console.log(patchhPostDto);
+  public updatePost(@Body() patchhPostDto: PatchhPostDto) {
+    return this.postsService.update(patchhPostDto);
   }
 
   // delete post

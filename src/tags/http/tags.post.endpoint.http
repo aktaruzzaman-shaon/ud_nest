@@ -1,0 +1,11 @@
+POST http://localhost:3000/tags
+Content-Type: application/json
+
+{
+  "name": "react js sdfsdfsfsfsrte",
+  "slug": "react-framework-obssfsffsdfer",
+  "description": "All content related to React.js tutorials and updates",
+  "schema": "{}",
+  "featuredImageUrl": "https://cdn.example.com/images/react-banner.jpg",
+  "test":"test"
+}

@@ -9,8 +9,8 @@ import {
 
 @Entity()
 export class Tag {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({
     type: 'varchar',
@@ -45,7 +45,13 @@ export class Tag {
     length: 1024,
     nullable: true,
   })
-  featuredImageUrl?: string;
+  featuredImageUrl: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  test: string;
 
   @CreateDateColumn()
   createDate: Date;
