@@ -27,10 +27,8 @@ export class PostsService {
   public async create(@Body() createPostDto: CreatePostDto) {
     //find author from database based on authorId
     let author = await this.usersService.findOneById(createPostDto.authorId);
-    console.log(author, 'author');
     //find tags
     let tags = await this.tagsService.findMultipleTags(createPostDto.tags);
-    console.log(tags, 'tags');
 
     //create metaoption
     // const metaOptions = createPostDto.metaOptions
@@ -52,7 +50,6 @@ export class PostsService {
 
     //   post.metaOptions = metaOptions;
     // }
-
     return await this.postsRepository.save(post);
   }
 
