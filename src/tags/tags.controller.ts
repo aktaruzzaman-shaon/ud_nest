@@ -19,8 +19,8 @@ export class TagsController {
     return this.tagService.create(createTagDto);
   }
 
-  @Delete()
-  public async delete(@Query('id', ParseIntPipe) id: number) {
-    return await this.tagService.delete(id);
+  @Delete('soft-delete')
+  public async softDelete(@Query('id', ParseIntPipe) id: number) {
+    return await this.tagService.softDelete(id);
   }
 }

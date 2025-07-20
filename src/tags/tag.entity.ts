@@ -54,12 +54,6 @@ export class Tag {
   })
   posts: Post[];
 
-  @Column({
-    type: 'varchar',
-    nullable: true,
-  })
-  test: string;
-
   @CreateDateColumn()
   createDate: Date;
 
