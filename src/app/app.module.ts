@@ -1,66 +1,3 @@
-// /* eslint-disable @typescript-eslint/no-misused-promises */
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { TasksModule } from '../tasks/tasks.module';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
-// import { appConfig } from '../config/app.config';
-// import { appConfigSchema } from '../config/config.types';
-// import { typeOrmConfig } from '../config/database.config';
-// import { TypeOrmModule } from '@nestjs/typeorm';
-// import { TypedConfigService } from '../config/typed-config.service';
-// import { Task } from '../task.entity';
-// import { UsersModule } from 'src/users/users.module';
-// import { Type } from 'class-transformer';
-
-// @Module({
-//   // imports ------------------------
-//   imports: [
-//     // TypeOrmModule.forRootAsync({
-//     //   imports: [ConfigModule],
-//     //   inject: [ConfigService],
-//     //   useFactory: (configService: TypedConfigService) => ({
-//     //     ...configService.get('database'),
-//     //     entities: [Task],
-//     //     // return configService.get('typeOrmConfig');
-//     //   }),
-//     // }),
-//     // ConfigModule.forRoot({
-//     //   load: [appConfig, typeOrmConfig],
-//     //   validationSchema: appConfigSchema,
-//     //   validationOptions: {
-//     //     // allowUnknown: false,
-//     //     abortEarly: true,
-//     //   },
-//     // }),
-//     TypeOrmModule.forRoot({
-//       type: 'postgres',
-//       entities: [],
-//       synchronize: true,
-//       port: 5432,
-//       host: 'localhost',
-//       username: 'postgres',
-//       password: '123456',
-//       database: 'udnest',
-//     }),
-//     TasksModule,
-//     UsersModule, // Importing UsersModule
-//   ],
-
-//   // controllers ------------------------
-//   controllers: [AppController],
-
-//   // provides-------------------------
-//   providers: [
-//     AppService,
-//     {
-//       provide: TypedConfigService,
-//       useExisting: ConfigService,
-//     },
-//   ],
-// })
-// export class AppModule {}
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 // import { AuthModule } from './auth/auth.module';
@@ -71,27 +8,35 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { TagsModule } from 'src/tags/tags.module';
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 // import { User } from 'src/users/user.entity';
 // import { UsersModule } from './users/users.module';
+
+const ENV = process.env.NODE_ENV;
 
 @Module({
   imports: [
     UsersModule,
     PostsModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // envFilePath: ['.env.development'], // Makes the configuration available globally
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: (): TypeOrmModuleOptions => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
         type: 'postgres',
         // entities: [User],
         autoLoadEntities: true,
         synchronize: true,
-        port: 3005,
-        username: 'postgres',
-        password: 'postgres',
-        host: 'localhost',
-        database: 'udnest',
+        port: +configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        host: configService.get('DATABASE_HOST'),
+        database: configService.get('DATABASE_NAME'),
       }),
     }),
     TagsModule,

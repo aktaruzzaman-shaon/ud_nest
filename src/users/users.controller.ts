@@ -69,7 +69,7 @@ export class UsersController {
     // @Param('optional') optional?: string,
   ) {
     const userId = getUsersParamDto.id ?? 0;
-    return this.userService.findOneById(userId);
+    return this.userService.findAll(getUsersParamDto, limit, page);
   }
 
   @Post()
