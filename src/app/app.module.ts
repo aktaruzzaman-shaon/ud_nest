@@ -9,7 +9,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { TagsModule } from 'src/tags/tags.module';
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { appConfig } from 'src/config/app.config';
+import appConfig from 'src/config/app.config';
+import databaseConfig from 'src/config/database.config';
+import environmentValidation from 'src/config/environment.validation';
 // import { User } from 'src/users/user.entity';
 // import { UsersModule } from './users/users.module';
 
@@ -25,9 +27,9 @@ const ENV = process.env.NODE_ENV;
       isGlobal: true,
       // envFilePath: ['.env.development'], // Makes the configuration available globally
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
-      load: [appConfig],
+      load: [appConfig, databaseConfig],
+      validationSchema: environmentValidation,
     }),
-    
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Body, Injectable } from '@nestjs/common';
+
+import { BadRequestException, Body, Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { UserService } from 'src/users/providers/users.service';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { Repository } from 'typeorm';
@@ -95,26 +96,61 @@ export class PostsService {
   // update post
 
   public async update(patchPostDto: PatchhPostDto) {
+    let tags:any;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let newpost = undefined;
     //find the tags
-    let tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+    try {
+      tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process the request. Please try again later.',
+      );
+    }
+
+    if(!tags || tags.length !== patchPostDto.tags?.length) {
+      throw new BadRequestException(
+        'Please check your tag ID and try again'
+      )
+    }
+      throw new RequestTimeoutException(
+        'Unable to process the request. Please try again later.',
+        {
+          description: 'Tags not found',
+        },
+      );
+
+    }
+
     //find the post
-    let newpost = await this.postsRepository.findOneBy({
-      id: patchPostDto.id,
-    });
+    // Find the Post
+    try {
+      // Returns null if the post does not exist
+      newpost = await this.postsRepository.findOneBy({
+        id: patchPostDto.id,
+      });
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment please try later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
 
     if (!newpost) {
       throw new Error('Post not found');
     }
 
     // Update post related properties
-    newpost.title = patchPostDto.title ?? newpost.title;
-    newpost.content = patchPostDto.content ?? newpost.content;
-    newpost.status = patchPostDto.status ?? newpost.status;
-    newpost.postType = patchPostDto.postType ?? newpost.postType;
-    newpost.slug = patchPostDto.slug ?? newpost.slug;
+    newpost.title = PatchhPostDto.title ?? newpost.title;
+    newpost.content = PatchhPostDto.content ?? newpost.content;
+    newpost.status = PatchhPostDto.status ?? newpost.status;
+    newpost.postType = PatchhPostDto.postType ?? newpost.postType;
+    newpost.slug = PatchhPostDto.slug ?? newpost.slug;
     newpost.featuredImageUrl =
-      patchPostDto.featuredImageUrl ?? newpost.featuredImageUrl;
-    newpost.publishOn = patchPostDto.publishOn ?? newpost.publishOn;
+      PatchhPostDto.featuredImageUrl ?? newpost.featuredImageUrl;
+    newpost.publishOn = PatchhPostDto.publishOn ?? newpost.publishOn;
 
     //assign the new tags
     newpost.tags = tags;

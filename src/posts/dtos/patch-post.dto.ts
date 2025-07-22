@@ -9,4 +9,12 @@ export class PatchhPostDto extends PartialType(CreatePostDto) {
   @IsInt()
   @IsNotEmpty()
   id: number;
+  static id: any;
+  static title: any;
+  static content: any;
+  static status: any;
+  static postType: any;
+  static slug: any;
+  static featuredImageUrl: any;
+  static publishOn: any;
 }
