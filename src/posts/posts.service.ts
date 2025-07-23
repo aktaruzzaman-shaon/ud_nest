@@ -1,7 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable prefer-const */
 
-import { BadRequestException, Body, Injectable, Req, RequestTimeoutException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Injectable,
+  NotFoundException,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { UserService } from 'src/users/providers/users.service';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { Repository } from 'typeorm';
@@ -96,39 +103,38 @@ export class PostsService {
   // update post
 
   public async update(patchPostDto: PatchhPostDto) {
-    let tags:any;
+    let tags: any;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let newpost = undefined;
+    let newpost;
     //find the tags
     try {
       tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new RequestTimeoutException(
         'Unable to process the request. Please try again later.',
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if(!tags || tags.length !== patchPostDto.tags?.length) {
-      throw new BadRequestException(
-        'Please check your tag ID and try again'
-      )
+      throw new BadRequestException('Please check your tag ID and try again');
     }
-      throw new RequestTimeoutException(
-        'Unable to process the request. Please try again later.',
-        {
-          description: 'Tags not found',
-        },
-      );
+    //   throw new RequestTimeoutException(
+    //     'Unable to process the request. Please try again later.',
+    //     {
+    //       description: 'Tags not found',
+    //     },
+    //   );
+    // }
 
-    }
-
-    //find the post
     // Find the Post
     try {
       // Returns null if the post does not exist
       newpost = await this.postsRepository.findOneBy({
         id: patchPostDto.id,
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new RequestTimeoutException(
         'Unable to process your request at the moment please try later',
@@ -139,10 +145,11 @@ export class PostsService {
     }
 
     if (!newpost) {
-      throw new Error('Post not found');
+      throw new NotFoundException('Post not found');
     }
 
     // Update post related properties
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     newpost.title = PatchhPostDto.title ?? newpost.title;
     newpost.content = PatchhPostDto.content ?? newpost.content;
     newpost.status = PatchhPostDto.status ?? newpost.status;
@@ -155,7 +162,15 @@ export class PostsService {
     //assign the new tags
     newpost.tags = tags;
 
+    try {
+      await this.postsRepository.save(newpost);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to save the post. Please try again later.',
+      );
+    }
     //save the post and return it
-    return await this.postsRepository.save(newpost);
+    return newpost;
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
@@ -8,13 +9,14 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 // import { GetUsersParamDto } from '../dtos/get-users-param.dto';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { ConfigService, ConfigType } from '@nestjs/config';
 import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import profileConfig from '../config/profile.config';
+import { UsersCreateManyProvider } from './users-create-many.provider';
 
 @Injectable()
 export class UserService {
@@ -24,6 +26,10 @@ export class UserService {
     @Inject(profileConfig.KEY)
     private readonly profileConfiguration: ConfigType<typeof profileConfig>,
     private readonly configServcie: ConfigService,
+
+    // Inject datasource
+    private readonly dataSource: DataSource,
+    private readonly UsersCreateManyProvider: UsersCreateManyProvider,
   ) {
     //injecting repository is not needed here as this is a mock service
   }
@@ -88,6 +94,7 @@ export class UserService {
     });
   }
 
+  // create user =========================================================
   public async createuser(createUserDto: CreateUserDto) {
     let existingUser: any;
     try {
@@ -123,5 +130,27 @@ export class UserService {
       );
     }
     return newUser;
+  }
+
+  // create many user ========================================================
+  public async createMany(createUserDto: CreateUserDto[]) {
+    return await this.UsersCreateManyProvider.createMany(createUserDto);
+    // const newUsers: User[] = [];
+    // const queryRunner = this.dataSource.createQueryRunner();
+    // await queryRunner.connect();
+    // await queryRunner.startTransaction();
+    // try {
+    //   for (const user of createUserDto) {
+    //     const newUser = queryRunner.manager.create(User, user);
+    //     const result = await queryRunner.manager.save(newUser);
+    //     newUsers.push(result);
+    //   }
+    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    //   await queryRunner.commitTransaction();
+    // } catch (error) {
+    //   await queryRunner.rollbackTransaction();
+    // } finally {
+    //   await queryRunner.release();
+    // }
   }
 }
