@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dtos/create-user.dto';
+import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { User } from '../user.entity';
 import { DataSource } from 'typeorm';
+import { CreateManyUserDto } from '../dtos/create-many-user.dto';
 
 @Injectable()
 export class UsersCreateManyProvider {
@@ -9,14 +9,22 @@ export class UsersCreateManyProvider {
     // Inject datasource
     private readonly dataSource: DataSource,
   ) {}
-  public async createMany(createUserDto: CreateUserDto[]) {
+
+  public async createMany(createManyUserDto: CreateManyUserDto) {
     const newUsers: User[] = [];
     const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+
     try {
-      for (const user of createUserDto) {
-        const newUser = queryRunner.manager.create(User, user);
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error: any) {
+      throw new RequestTimeoutException("Couldn't connect to the database");
+    }
+
+    try {
+      for (const user of createManyUserDto.users) {
+        const newUser = queryRunner.manager.create(User, user as Partial<User>);
         const result = await queryRunner.manager.save(newUser);
         newUsers.push(result);
       }
@@ -24,6 +32,7 @@ export class UsersCreateManyProvider {
       await queryRunner.commitTransaction();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error('Error creating users:', error);
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();

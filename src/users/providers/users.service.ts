@@ -17,6 +17,7 @@ import { ConfigService, ConfigType } from '@nestjs/config';
 import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import profileConfig from '../config/profile.config';
 import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUserDto } from '../dtos/create-many-user.dto';
 
 @Injectable()
 export class UserService {
@@ -133,8 +134,8 @@ export class UserService {
   }
 
   // create many user ========================================================
-  public async createMany(createUserDto: CreateUserDto[]) {
-    return await this.UsersCreateManyProvider.createMany(createUserDto);
+  public async createMany(createManyUserDto: CreateManyUserDto) {
+    return await this.UsersCreateManyProvider.createMany(createManyUserDto);
     // const newUsers: User[] = [];
     // const queryRunner = this.dataSource.createQueryRunner();
     // await queryRunner.connect();

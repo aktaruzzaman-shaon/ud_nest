@@ -2,8 +2,30 @@ POST http://localhost:3000/users
 Content-type: application/json
 
 {
-  "firstName": "Johnsfsf",
+  "firstName": "Mac do",
   "lastName": "Doesfsf",
   "email": "john.doe@example.com",
-  "password": "12312313131"
+  "password": "12312313131",
+},
+
+
+
+
+POST http://localhost:3000/users/create-many
+Content-type: application/json
+
+[{
+  "firstName": "Mac do",
+  "lastName": "Doesfsf",
+  "email": "john.dsssdfdfoddsfse@example.com",
+  "password": "12312313131",
+  "id": 1056
+},
+{
+  "firstName": "Johnsfsf",
+  "lastName": "Doesfsf",
+  "email": "john.dsfhhdfdfdsfdffoe@example.com",
+  "password": "12312313131",
+  "id": 1043
 }
+]
