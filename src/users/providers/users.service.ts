@@ -18,6 +18,9 @@ import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import profileConfig from '../config/profile.config';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUserDto } from '../dtos/create-many-user.dto';
+import { CreateUserProvider } from './create-user.provider';
+import { create } from 'domain';
+import { FindOneByEmailProvider } from './find-one-by-email.provider';
 
 @Injectable()
 export class UserService {
@@ -31,6 +34,8 @@ export class UserService {
     // Inject datasource
     private readonly dataSource: DataSource,
     private readonly UsersCreateManyProvider: UsersCreateManyProvider,
+    private readonly createUserProvider: CreateUserProvider,
+    private readonly findOneUserByEmailProvider: FindOneByEmailProvider,
   ) {
     //injecting repository is not needed here as this is a mock service
   }
@@ -97,40 +102,7 @@ export class UserService {
 
   // create user =========================================================
   public async createuser(createUserDto: CreateUserDto) {
-    let existingUser: any;
-    try {
-      existingUser = await this.usersRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-      // eslint-disable-next-line prettier/prettier
-    } catch (error:any) {
-      throw new RequestTimeoutException(
-        'Unable to process the request. Please try again later.',
-        {
-          description: 'Database connection error',
-        },
-      );
-    }
-
-    if (existingUser) {
-      throw new BadRequestException(
-        'The user already exists with this email address.',
-      );
-    }
-    let newUser = this.usersRepository.create(createUserDto);
-
-    try {
-      newUser = await this.usersRepository.save(newUser);
-    } catch (error) {
-      throw new RequestTimeoutException(
-        'Unable to process the request. Please try again later.',
-
-        {
-          description: 'Database connection error',
-        },
-      );
-    }
-    return newUser;
+    return this.createUserProvider.createuser(createUserDto);
   }
 
   // create many user ========================================================
@@ -153,5 +125,9 @@ export class UserService {
     // } finally {
     //   await queryRunner.release();
     // }
+  }
+
+  public async findOneByEmail(email: string) {
+    return await this.findOneUserByEmailProvider.findeOneByEmail(email);
   }
 }

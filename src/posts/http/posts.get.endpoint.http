@@ -1,1 +1,12 @@
-GET http://localhost:3000/posts
+{{
+    // pre request scripts . we can use normal js on this yaak file
+    const date = new Date();
+    exports.startDate = date.toString();
+    exports.endDate = date.toString();
+}}
+
+GET http://localhost:3000/posts/12
+?startDate={{startDate}}
+&endDate={{endDate}}
+&limit=2
+&page=1

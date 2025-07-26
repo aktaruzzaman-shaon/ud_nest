@@ -1,4 +1,8 @@
-import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { User } from '../user.entity';
 import { DataSource } from 'typeorm';
 import { CreateManyUserDto } from '../dtos/create-many-user.dto';
@@ -32,10 +36,18 @@ export class UsersCreateManyProvider {
       await queryRunner.commitTransaction();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error('Error creating users:', error);
       await queryRunner.rollbackTransaction();
+      throw new ConflictException('Could not complete the teansaction', {
+        description: String(error),
+      });
     } finally {
-      await queryRunner.release();
+      try {
+        await queryRunner.release();
+      } catch (error) {
+        throw new RequestTimeoutException('Could not release the connection',{
+          description: String(error)
+        })
+      }
     }
     return newUsers;
   }

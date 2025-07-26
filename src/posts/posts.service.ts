@@ -17,6 +17,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PatchhPostDto } from './dtos/patch-post.dto';
+import { GetPostsDto } from './dtos/get-posts.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/pagination.interface';
 
 @Injectable()
 export class PostsService {
@@ -30,6 +33,8 @@ export class PostsService {
     private readonly metaOptionsRepository: Repository<MetaOption>,
 
     private readonly tagsService: TagsService,
+
+    private readonly paginattionProvider: PaginationProvider,
   ) {}
 
   public async create(@Body() createPostDto: CreatePostDto) {
@@ -58,20 +63,22 @@ export class PostsService {
 
     //   post.metaOptions = metaOptions;
     // }
+
     return await this.postsRepository.save(post);
   }
 
   // findall method
-  public async findAll() {
-    // const user = this.usersService.findOneById(userId);
-    let posts = await this.postsRepository.find({
-      relations: {
-        // tags: true,
-        // metaOptions: true,
-        // author: true,
-        // eslint-disable-next-line prettier/prettier
-      }
-    });
+  public async findAll(
+    postQuery: GetPostsDto,
+    userId: string,
+  ): Promise<Paginated<Post>> {
+    let posts = await this.paginattionProvider.paginateQuery(
+      {
+        limit: postQuery.limit,
+        page: postQuery.page,
+      },
+      this.postsRepository,
+    );
 
     return posts;
   }
@@ -117,7 +124,7 @@ export class PostsService {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if(!tags || tags.length !== patchPostDto.tags?.length) {
+    if (!tags || tags.length !== patchPostDto.tags?.length) {
       throw new BadRequestException('Please check your tag ID and try again');
     }
     //   throw new RequestTimeoutException(

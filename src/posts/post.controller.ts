@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   // Param,
   ParseIntPipe,
   Patch,
@@ -13,6 +14,7 @@ import { PostsService } from './posts.service';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PatchhPostDto } from './dtos/patch-post.dto';
+import { GetPostsDto } from './dtos/get-posts.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -24,9 +26,9 @@ export class PostsController {
   ) {}
 
   // get request--------------------------------------
-  @Get()
-  public getPosts() {
-    return this.postsService.findAll();
+  @Get('/:userId')
+  public getPosts(@Param('userId') userId:string, @Query() postQuery:GetPostsDto) {
+    return this.postsService.findAll(postQuery, userId);
   }
 
   // post request-----------------------------------
@@ -39,10 +41,11 @@ export class PostsController {
   })
   @Post()
   public createPost(@Body() createPostDto: CreatePostDto) {
+    console.log(createPostDto)
     return this.postsService.create(createPostDto);
   }
 
-  // Patch request-----------------------------------
+  // Patch request----------------------------------
   // post request-----------------------------------
   @ApiOperation({
     summary: 'Update a new blog post',
