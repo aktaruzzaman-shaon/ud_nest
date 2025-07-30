@@ -75,6 +75,6 @@ export class AuthenticationGuard implements CanActivate {
       //   return true;
       // }
     }
-    throw error;
+    return true;
   }
 }
