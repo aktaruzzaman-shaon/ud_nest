@@ -2,9 +2,9 @@ POST http://localhost:3000/users
 Content-type: application/json
 
 {
-  "firstName": "hi fo do and Mark do",
+  "firstName": "Ak Shaon",
   "lastName": "Doesfsf",
-  "email": "john.44@example.com",
+  "email": "john.444452484@example.com",
   "password": "12345678"
 }
 
@@ -20,7 +20,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsI
   "password": "12312313131",
   "id": 1056
 },
-{h
+{
   "firstName": "Johnsfsf",
   "lastName": "Doesfsf",
   "email": "john.dsfhhdfdfdsfdffoe@example.com",

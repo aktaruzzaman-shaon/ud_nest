@@ -62,6 +62,7 @@ const ENV = process.env.NODE_ENV;
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
     },
+    // eslint-disable-next-line prettier/prettier
     AccessTokenGuard
   ],
 })
