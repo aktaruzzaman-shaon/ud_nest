@@ -19,12 +19,15 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "doc": "npx @compodoc/compodoc -p tsconfig.json -s --port 3001 --watch -d ./documentation",
-     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:generate": "npm run typeorm -- migration:generate -d src/data-source.ts src/migrations/NameYourMigration",
-    "migration:run": "npm run typeorm -- migration:run -d src/data-source.ts",
-    "migration:revert": "npm run typeorm -- migration:revert -d src/data-source.ts"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run build && npx ts-node ./node_modules/typeorm/cli.js migration:generate -d typeorm-cli.config.ts",
+    "migration:create": "npx ts-node ./node_modules/typeorm/cli.js migration:create",
+    "migration:run": "npx ts-node ./node_modules/typeorm/cli.js migration:run -d typeorm-cli.config.ts",
+    "migration:revert": "npx ts-node ./node_modules/typeorm/cli.js migration:revert -d typeorm-cli.config.ts",
+    "migration:show": "npx ts-node ./node_modules/typeorm/cli.js migration:show -d typeorm-cli.config.ts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
