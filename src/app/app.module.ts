@@ -38,17 +38,33 @@ const ENV = process.env.NODE_ENV;
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
-        type: 'postgres',
-        // entities: [User],
-        autoLoadEntities: configService.get('database.autoLoadEntities'),
-        synchronize: configService.get('database.synchronize'),
-        port: +configService.get('database.port'),
-        username: configService.get('database.user'),
-        password: configService.get('database.password'),
-        host: configService.get('database.host'),
-        database: configService.get('database.name'),
-      }),
+      useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
+        const dbUrl = configService.get<string>('database.url');
+
+        if (dbUrl) {
+          return {
+            type: 'postgres',
+            url: dbUrl,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+            autoLoadEntities: configService.get('database.autoLoadEntities'),
+            synchronize: configService.get('database.synchronize'),
+          };
+        }
+
+        return {
+          type: 'postgres',
+          // entities: [User],
+          autoLoadEntities: configService.get('database.autoLoadEntities'),
+          synchronize: configService.get('database.synchronize'),
+          port: +configService.get('database.port'),
+          username: configService.get('database.user'),
+          password: configService.get('database.password'),
+          host: configService.get('database.host'),
+          database: configService.get('database.name'),
+        };
+      },
     }),
     TagsModule,
     MetaOptionsModule, // Importing MetaOptionsModule

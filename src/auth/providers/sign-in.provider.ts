@@ -11,6 +11,7 @@ import { HashingProvider } from './hashing.provider';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import jwtConfig from '../config/jwt.config';
+import { ActiveUserData } from '../interfaces/active-userData.interface';
 
 @Injectable()
 export class SignInProvider {
@@ -23,7 +24,7 @@ export class SignInProvider {
     private readonly jwtConfiguation: ConfigType<typeof jwtConfig>,
   ) {}
   public async signIn(singInDto: SignInDto) {
-    let user = await this.userService.findOneByEmail(singInDto.email);
+    const user = await this.userService.findOneByEmail(singInDto.email);
     let isEqual: boolean = false;
     try {
       isEqual = await this.hashingProvider.comparePassword(
@@ -44,7 +45,7 @@ export class SignInProvider {
       {
         sub: user.id,
         email: user.email,
-      },
+      } as ActiveUserData,
       {
         audience: this.jwtConfiguation.audience,
         issuer: this.jwtConfiguation.issuer,
