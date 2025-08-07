@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable prefer-const */
 
 import {
@@ -21,6 +21,9 @@ import { PatchhPostDto } from './dtos/patch-post.dto';
 import { GetPostsDto } from './dtos/get-posts.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/pagination.interface';
+import { create } from 'domain';
+import { CreatePostProvider } from './provides/create-post.provider';
+import { ActiveUserData } from 'src/auth/interfaces/active-userData.interface';
 
 @Injectable()
 export class PostsService {
@@ -36,36 +39,38 @@ export class PostsService {
     private readonly tagsService: TagsService,
 
     private readonly paginattionProvider: PaginationProvider,
+
+    private readonly createPostProvider: CreatePostProvider,
   ) {}
 
-  public async create(@Body() createPostDto: CreatePostDto) {
-    //find author from database based on authorId
-    let author = await this.usersService.findOneById(createPostDto.authorId);
-    //find tags
-    let tags = await this.tagsService.findMultipleTags(createPostDto.tags);
+  public async create(createPostDto: CreatePostDto, user: ActiveUserData) {
+    // //find author from database based on authorId
+    // let author = await this.usersService.findOneById(createPostDto.authorId);
+    // //find tags
+    // let tags = await this.tagsService.findMultipleTags(createPostDto.tags);
 
-    //create metaoption
-    // const metaOptions = createPostDto.metaOptions
-    //   ? this.metaOptionsRepository.create(createPostDto.metaOptions)
-    //   : null;
-    // if (metaOptions) {
-    //   await this.metaOptionsRepository.save(metaOptions);
-    // }
+    // //create metaoption
+    // // const metaOptions = createPostDto.metaOptions
+    // //   ? this.metaOptionsRepository.create(createPostDto.metaOptions)
+    // //   : null;
+    // // if (metaOptions) {
+    // //   await this.metaOptionsRepository.save(metaOptions);
+    // // }
 
-    //create post
-    let post = this.postsRepository.create({
-      ...createPostDto,
-      author: author === null ? undefined : author,
-      tags: tags,
-    });
+    // //create post
+    // let post = this.postsRepository.create({
+    //   ...createPostDto,
+    //   author: author === null ? undefined : author,
+    //   tags: tags,
+    // });
 
-    //add metaoptions
-    // if (metaOptions) {
+    // //add metaoptions
+    // // if (metaOptions) {
 
-    //   post.metaOptions = metaOptions;
-    // }
+    // //   post.metaOptions = metaOptions;
+    // // }
 
-    return await this.postsRepository.save(post);
+    return await this.createPostProvider.create(createPostDto, user);
   }
 
   // findall method
@@ -112,12 +117,11 @@ export class PostsService {
 
   public async update(patchPostDto: PatchhPostDto) {
     let tags: any;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     let newpost;
     //find the tags
     try {
       tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new RequestTimeoutException(
         'Unable to process the request. Please try again later.',
@@ -142,7 +146,6 @@ export class PostsService {
       newpost = await this.postsRepository.findOneBy({
         id: patchPostDto.id,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new RequestTimeoutException(
         'Unable to process your request at the moment please try later',
@@ -157,7 +160,7 @@ export class PostsService {
     }
 
     // Update post related properties
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     newpost.title = PatchhPostDto.title ?? newpost.title;
     newpost.content = PatchhPostDto.content ?? newpost.content;
     newpost.status = PatchhPostDto.status ?? newpost.status;
@@ -172,7 +175,6 @@ export class PostsService {
 
     try {
       await this.postsRepository.save(newpost);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new RequestTimeoutException(
         'Unable to save the post. Please try again later.',

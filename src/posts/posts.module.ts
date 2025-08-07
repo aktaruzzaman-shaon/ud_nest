@@ -16,7 +16,7 @@ import { CreatePostProvider } from './provides/create-post.provider';
     UsersModule,
     TagsModule,
     TypeOrmModule.forFeature([Post, MetaOption]),
-    PaginationModule
+    PaginationModule,
   ],
 })
 export class PostsModule {}

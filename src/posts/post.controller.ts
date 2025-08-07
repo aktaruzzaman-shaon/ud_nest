@@ -50,7 +50,7 @@ export class PostsController {
     @ActiveUser() user: ActiveUserData,
   ) {
     console.log(user);
-    // return this.postsService.create(createPostDto);
+    return this.postsService.create(createPostDto, user);
   }
 
   // Patch request----------------------------------
