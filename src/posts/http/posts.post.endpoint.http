@@ -1,11 +1,11 @@
 POST http://localhost:3000/posts/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMwLCJlbWFpbCI6ImpvaG4uNDQ0NDUyNDg0QGV4YW1wbGUuY29tIiwiaWF0IjoxNzU0NTU3NDMxLCJleHAiOjE3NTQ1NjEwMzEsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.9x5X6pLQKuUJHU_t9R7VzbieVAhaUGC2bE0ovAD4iUI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMwLCJlbWFpbCI6ImpvaG4uNDQ0NDUyNDg0QGV4YW1wbGUuY29tIiwiaWF0IjoxNzU0Nzk4MzgwLCJleHAiOjE3NTQ4MDE5ODAsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.Rs9podpxn5SJ6AkJb6CSxnKxwjxD4eGdHfb0m0uFBxU
 
 {
   "title": "What's new with NestJS tagsdfsfsf",
   "postType": "post",
-  "slug": "new-with-nestjs-mysqlfsfgdgnewurlnew",
+  "slug": "new-with-nestjs-mysqlfsfgdgnewurlnewfsdfdsf",
   "status": "draft",
   "content": "test content",
   "schema": "{\r\n \"@context\": \"https:\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n }",
@@ -15,5 +15,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMwLCJlbWFpb
   "metaOptions" : {
     "metaValue": "{\"sidebarEnabled\": true, \"footerActive\": false}"
     },
-  "tags": [3]
+  "tags": [4]
 }
