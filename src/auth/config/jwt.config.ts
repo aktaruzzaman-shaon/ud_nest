@@ -7,6 +7,8 @@ export default registerAs('jwt', () => {
     issuer: process.env.JWT_TOKEN_ISSUER,
     accessToken: parseInt(process.env.JWT_ACCESS_TOKEN_TTL ?? '3600', 10),
     // eslint-disable-next-line prettier/prettier
-    refreshToken:parseInt(process.env.JWT_REFRESH_TOKEN_TTL ?? '86400', 10), 
+    refreshToken:parseInt(process.env.JWT_REFRESH_TOKEN_TTL ?? '86400', 10),
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleLCientSecret: process.env.GOOGLE_CLIENT_SECRET,
   };
 });

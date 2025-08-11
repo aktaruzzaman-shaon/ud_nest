@@ -21,6 +21,9 @@ export class SignInProvider {
   public async signIn(singInDto: SignInDto) {
     const user = await this.userService.findOneByEmail(singInDto.email);
     let isEqual: boolean = false;
+    if (!user.password) {
+      throw new UnauthorizedException('User password not found');
+    }
     try {
       isEqual = await this.hashingProvider.comparePassword(
         singInDto.password,
