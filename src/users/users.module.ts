@@ -9,9 +9,7 @@ import { CreateUserProvider } from './providers/create-user.provider';
 import profileConfig from './config/profile.config';
 import { AuthModule } from 'src/auth/auth.module';
 import { FindOneByEmailProvider } from './providers/find-one-by-email.provider';
-import jwtConfig from 'src/auth/config/jwt.config';
-import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
+import { FindOneByGoogleIdProviderTs } from './providers/find-one-by-google-id.provider.ts';
 
 @Module({
   controllers: [UsersController],
@@ -20,6 +18,7 @@ import { APP_GUARD } from '@nestjs/core';
     UsersCreateManyProvider,
     CreateUserProvider,
     FindOneByEmailProvider,
+    FindOneByGoogleIdProviderTs,
     // {
     //   provide: APP_GUARD,
     //   useClass: AccessTokenGuard,

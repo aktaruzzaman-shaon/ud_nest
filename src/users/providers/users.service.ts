@@ -1,4 +1,3 @@
-/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
@@ -21,6 +20,7 @@ import { CreateManyUserDto } from '../dtos/create-many-user.dto';
 import { CreateUserProvider } from './create-user.provider';
 import { create } from 'domain';
 import { FindOneByEmailProvider } from './find-one-by-email.provider';
+import { FindOneByGoogleIdProviderTs } from './find-one-by-google-id.provider.ts';
 
 @Injectable()
 export class UserService {
@@ -36,6 +36,7 @@ export class UserService {
     private readonly UsersCreateManyProvider: UsersCreateManyProvider,
     private readonly createUserProvider: CreateUserProvider,
     private readonly findOneUserByEmailProvider: FindOneByEmailProvider,
+    private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProviderTs,
   ) {
     //injecting repository is not needed here as this is a mock service
   }
@@ -129,5 +130,9 @@ export class UserService {
 
   public async findOneByEmail(email: string) {
     return await this.findOneUserByEmailProvider.findeOneByEmail(email);
+  }
+
+  public async findOneByGoogleId(googleId: string) {
+    return await this.findOneByGoogleIdProvider.findOneByGoogleId(googleId);
   }
 }
